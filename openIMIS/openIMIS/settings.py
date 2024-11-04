@@ -277,7 +277,7 @@ WSGI_APPLICATION = "openIMIS.wsgi.application"
 
 GRAPHENE = {
     "SCHEMA": "openIMIS.schema.schema",
-    "RELAY_CONNECTION_MAX_LIMIT": 100,
+    "RELAY_CONNECTION_MAX_LIMIT": None,
     "GRAPHIQL_HEADER_EDITOR_ENABLED": True,
     "MIDDLEWARE": [
         "openIMIS.tracer.TracerMiddleware",
