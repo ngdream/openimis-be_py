@@ -7,7 +7,7 @@ import os
 
 from ..openimisapps import openimis_apps, get_locale_folders
 from datetime import timedelta
-from .common import DEBUG, BASE_DIR, MODE
+from .common import DEBUG, BASE_DIR, MODE, protos, hosts
 from .security import REMOTE_USER_AUTHENTICATION
 
 # Makes openimis_apps available to other modules
@@ -17,6 +17,8 @@ OPENIMIS_APPS = openimis_apps()
 def SITE_ROOT():
     root = os.environ.get("SITE_ROOT", "")
     if root == "":
+        if hosts and protos:
+            return f"{protos[0]}://{hosts[0]}/"
         return root
     elif root.endswith("/"):
         return root
@@ -35,7 +37,7 @@ def SITE_URL():
 
 
 SITE_FRONT = os.environ.get("SITE_FRONT", "front")
-FRONTEND_URL = SITE_ROOT() + SITE_FRONT
+FRONTEND_URL = os.environ.get("FRONTEND_URL",  SITE_URL() + SITE_FRONT)
 
 # Application definition
 
@@ -192,4 +194,3 @@ EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", False)
 # By default, the maximum upload size is 2.5Mb, which is a bit short for base64 picture upload
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('DATA_UPLOAD_MAX_MEMORY_SIZE', 10 * 1024 * 1024))
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "")

@@ -1,17 +1,14 @@
 import os
-
+from .common import hosts, protos
+ 
 GRAPHQL_JWT.update({
     "JWT_COOKIE_SECURE": True,
     "JWT_COOKIE_SAMESITE": "Lax",
 })
 
 
-# Fetch protocols and hosts from environment variables
-protos = os.environ.get('PROTOS', default='https').split(',')
-hosts = os.environ.get('HOSTS', default='')
-
 # Set ALLOWED_HOSTS
-ALLOWED_HOSTS = hosts.split(',') if hosts else ['*']
+ALLOWED_HOSTS = hosts if hosts else ['*']
 
 # Create CSRF_TRUSTED_ORIGINS by combining protocols and hosts
 CSRF_TRUSTED_ORIGINS = [f'{proto}://{host.strip()}' for proto in protos for host in ALLOWED_HOSTS if host != '*']
