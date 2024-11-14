@@ -192,4 +192,3 @@ EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", False)
 # By default, the maximum upload size is 2.5Mb, which is a bit short for base64 picture upload
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get('DATA_UPLOAD_MAX_MEMORY_SIZE', 10 * 1024 * 1024))
 
-FRONTEND_URL = os.environ.get("FRONTEND_URL", "")
