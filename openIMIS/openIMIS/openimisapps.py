@@ -1,7 +1,10 @@
 import os
+import logging
 from importlib import resources
 
 from .openimisconf import load_openimis_conf
+
+logger = logging.getLogger(__name__)
 
 
 def extract_app(module):
@@ -21,8 +24,11 @@ def get_locale_folders():
     basedirs = []
     for mod in load_openimis_conf()["modules"]:
         mod_name = mod["name"]
-        with resources.path(mod_name, "__init__.py") as path:
-            apps.append(path.parent.parent)  # This might need to be more restrictive
+        try:
+            with resources.path(mod_name, "__init__.py") as path:
+                apps.append(path.parent.parent)
+        except ModuleNotFoundError:
+            logger.error(f"Module \"{mod_name}\" not found.")
 
     for topdir in ["."] + apps:
         for dirpath, dirnames, filenames in os.walk(topdir, topdown=True):

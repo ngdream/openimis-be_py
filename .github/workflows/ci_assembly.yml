@@ -44,6 +44,21 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
+      opensearch:
+        image: opensearchproject/opensearch:latest
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
+          cluster.name: my_opensearch_local
+          http.port: 9200
+          plugins.security.ssl.http.enabled: false
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: B9wc9VrqX7pY
+        options: >-
+          --health-cmd "curl -f -u admin:${OPENSEARCH_INITIAL_ADMIN_PASSWORD} http://localhost:9200/_cluster/health || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v2
 
@@ -63,13 +78,13 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Python dependencies
+        working-directory: ./script
         run: |
           sudo apt-get update
           sudo apt-get install jq
-
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          python modules-requirements.py openimis.json > modules-requirements.txt
+          pip install -r ../requirements.txt
+          python modules-requirements.py ../openimis.json > modules-requirements.txt
           pip install --no-cache-dir -r modules-requirements.txt
           export MODULES=$(jq -r '(.modules[].name)' openimis.json | xargs)
           echo $modules
@@ -96,7 +111,6 @@ jobs:
           PGPASSWORD=GitHub999 psql -U $DB_USER -h $DB_HOST -d $DB_NAME_TEST -f  ./sql_psql/database\ scripts/04_functions.sql | grep . | uniq -c
           PGPASSWORD=GitHub999 psql -U $DB_USER -h $DB_HOST -d $DB_NAME_TEST -f  ./sql_psql/database\ scripts/05_stored_procs.sql | grep . | uniq -c
           PGPASSWORD=GitHub999 psql -U $DB_USER -h $DB_HOST -d $DB_NAME_TEST -f  ./sql_psql/database\ scripts/demo_db.sql | grep . | uniq -c
-
         env:
           DB_HOST: localhost
           DB_PORT: 5432
@@ -145,7 +159,9 @@ jobs:
         env:
           SECRET_KEY: secret
           MODE: DEV
-          DB_ENGINE: django.db.backends.postgresql
+          DB_DEFAULT: postgresql
+          CELERY_BROKER_URL: "memory://openIMIS-test//"
+          CELERY_RESULT_BACKEND: "cache+memory://openIMIS-test//"
           #DJANGO_SETTINGS_MODULE: hat.settings
           DB_HOST: localhost
           DB_PORT: 5432
@@ -155,6 +171,10 @@ jobs:
           #DEV_SERVER: true
           SITE_ROOT: api
           CI_EXCLUDED_MODULE: ${{ vars.CI_EXCLUDED_MODULE }}
+          OPENSEARCH_ADMIN: admin
+          OPENSEARCH_PASSWORD: B9wc9VrqX7pY
+          OPEN_SEARCH_HTTP_PORT: 9200
+          OPENSEARCH_HOSTS: "localhost:9200"
 
       - name: Django tests MSSQL
         working-directory: ./openIMIS
@@ -169,7 +189,9 @@ jobs:
         env:
           SECRET_KEY: secret
           MODE: DEV
-          DB_ENGINE: mssql
+          DB_DEFAULT: mssql
+          CELERY_BROKER_URL: "memory://openIMIS-test//"
+          CELERY_RESULT_BACKEND: "cache+memory://openIMIS-test//"
           #DJANGO_SETTINGS_MODULE: hat.settings
           DB_HOST: localhost
           DB_PORT: 1433
@@ -180,3 +202,7 @@ jobs:
           SITE_ROOT: api
           #REMOTE_USER_AUTHENTICATION: False
           CI_EXCLUDED_MODULE: ${{ vars.CI_EXCLUDED_MODULE }}
+          OPENSEARCH_ADMIN: admin
+          OPENSEARCH_PASSWORD: B9wc9VrqX7pY
+          OPEN_SEARCH_HTTP_PORT: 9200
+          OPENSEARCH_HOSTS: "localhost:9200"
