@@ -127,6 +127,6 @@
         {
             "name": "claim_sampling",
             "pip": "openimis-be-claim_sampling~=1.0.0"
-        },
+        }
     ]
 }
