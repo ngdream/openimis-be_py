@@ -2,6 +2,7 @@ import logging
 from contextlib import contextmanager
 from .settings import IS_SENTRY_ENABLED, DEBUG
 import traceback
+from graphql import GraphQLError
 
 logger = logging.getLogger(__name__)
 
@@ -38,14 +39,5 @@ class TracerMiddleware:
                 # Proceed with the next middleware or resolver
                 return next(root, info, **kwargs)
             except Exception as e:
-                # Log the exception with its traceback
-                if DEBUG:
-                    logger.error("An error occurred: %s", str(e))
-                    logger.error("Traceback: %s", traceback.format_exc())
-                
-                # Optionally add error information to the trace
-                span.set_tag("error", True)
-                span.log_kv({"exception": str(e), "traceback": traceback.format_exc()})
-                
-                # Re-raise the exception to allow GraphQL to handle it
-                raise e
+                sentry_sdk.capture_exception(e)
+                raise GraphQLError(str(e))

@@ -105,6 +105,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 MIDDLEWARE = [
+    'sentry_sdk.integrations.django.middleware.SentryMiddleware'
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'core.middleware.GraphQLRateLimitMiddleware',
