@@ -20,10 +20,10 @@ msgid "claim.mutation.failed_to_change_status_of_claim"
 msgstr "Échec de la modification du statut de la demande %s"
 
 msgid "claim.validation.pricelist.item"
-msgstr "Impossible de trouver un produit médical valide dans  liste de prix des produits de santé pour le soin %s dans le lieu %s"
+msgstr "Impossible de trouver un produit médical valide dans  liste de prix des produits de santé pour le soin %s et dans le lieu %s"
 
 msgid "claim.validation.pricelist.service"
-msgstr "Impossible de trouver un soin valide dans  liste de prix des soins pour le soin %s dans le lieu %s"
+msgstr "Impossible de trouver un soin valide dans  liste de prix des soins pour le soin %s et dans le lieu %s"
 
 msgid "claim.validation.validity.item"
 msgstr "Le produit médical de la prestation %s fait référence à un produit médical %s qui n'est pas valide"
@@ -32,13 +32,13 @@ msgid "claim.validation.validity.service"
 msgstr "Soin de la prestation %s fait référence à un soin %s qui n'est pas valide"
 
 msgid "claim.validation.care_type.service"
-msgstr "Ce type de soins %s n'est pas compatible avec type de soins dans les établissements de santé %s avant %s alors que la prestation date du%s"
+msgstr "Ce type de soin %s n'est pas compatible avec les types de soin dans les établissements de santé %s avant %s alors que la prestation date du%s"
 
 msgid "claim.validation.target_date"
 msgstr "Prestation %s : ni \"date de début\" ni \"date de fin\" ne sont spécifié"
 
 msgid "claim.validation.care_type.item"
-msgstr "Ce type de soins %s n'est pas compatible avec type de soins dans les établissements de santé %s avant %s alors que la prestation date du%s"
+msgstr "Ce type de soin %s n'est pas compatible avec les type de soin dans les établissements de santé %s avant %s alors que la prestation date du %s"
 
 msgid "claim.validation.limitation.item"
 msgstr "Le produit médical %s de la prestation réfère vers le produit médical %s qui un masque de catégorie de patient %s mais l'assuré a un masque de %s"
